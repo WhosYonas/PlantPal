@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from models import User
-from schemas import UserCreate
+from models import User, Plant
+from schemas import UserCreate, PlantCreate
 
 def get_user(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
@@ -18,3 +18,25 @@ def create_user(db: Session, user: UserCreate):
 def delete_user(db: Session, user: User):
     db.delete(user)
     db.commit()
+
+def get_plant(db: Session, plant_id: int):
+    return db.query(Plant).filter(Plant.id == plant_id).first()
+
+def get_plant_by_name(db: Session, user_id: int, name: str):
+    return db.query(Plant).filter(
+        Plant.user_id == user_id,
+        Plant.plant_name == name
+    ).first()
+
+
+def create_plant(db: Session, plant: PlantCreate, user_id: int):
+    db_plant = Plant(
+        user_id=user_id,
+        plant_name=plant.plant_name,
+        plant_species=plant.plant_species,
+        watering_interval_days=plant.watering_interval_days
+    )
+    db.add(db_plant)
+    db.commit()
+    db.refresh(db_plant)
+    return db_plant

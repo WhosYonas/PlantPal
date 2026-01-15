@@ -1,6 +1,7 @@
 # schemas.py
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
 
 class UserBase(BaseModel):
     email: str
@@ -25,6 +26,6 @@ class PlantCreate(PlantBase):
 class Plant(PlantBase):
     id: int
     created_at: datetime
-    owner: User
+    owner: Optional[User]
     class Config:
         orm_mode = True

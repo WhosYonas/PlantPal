@@ -49,6 +49,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise HTTPException(status_code=401, detail="User not found")
     return user
 
+# Original authenticated endpoint
 @router.post("/", response_model=schemas.Plant)
 def create_plant(
     plant: schemas.PlantCreate,
@@ -59,3 +60,17 @@ def create_plant(
     if db_plant:
         raise HTTPException(status_code=400, detail="Plant already exists")
     return crud.create_plant(db, plant, current_user.id)
+
+# Test endpoint without authentication
+@router.post("/test", response_model=schemas.Plant)
+def create_plant_test(
+    plant: schemas.PlantCreate,
+    db: Session = Depends(get_db)
+):
+    """Test endpoint - no authentication required"""
+    user_id = plant.user_id
+    
+    db_plant = crud.get_plant_by_name(db, user_id, plant.plant_name)
+    if db_plant:
+        raise HTTPException(status_code=400, detail="Plant already exists")
+    return crud.create_plant(db, plant, user_id)

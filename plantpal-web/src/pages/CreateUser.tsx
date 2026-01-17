@@ -11,7 +11,7 @@ export default function CreateUser() {
   async function handleClick() {
     await apiFetch("/users/", {
       method: "POST",
-      body: JSON.stringify({ email, password_hash: password }),
+      body: JSON.stringify({ email, password }),
     });
   }
 

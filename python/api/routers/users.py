@@ -2,9 +2,25 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import SessionLocal
-import crud, schemas
+import crud, schemas, models
+from passlib.context import CryptContext
+
 
 router = APIRouter()
+#=========================PASSWORD HASHING====================
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto"
+)
+
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
 
 def get_db():
     db = SessionLocal()
@@ -13,12 +29,24 @@ def get_db():
     finally:
         db.close()
 
+#======================ENDPOINTS================================
+
+
 @router.post("/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_email(db, user.email)
-    if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    return crud.create_user(db, user)
+    hashed_password = hash_password(user.password)
+
+    db_user = models.User(
+        email=user.email,
+        password_hash=hashed_password,
+    )
+
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+
+    return db_user
+
 
 @router.delete("/{user_id}")
 def delete_user(user_id: int, db: Session = Depends(get_db)):
@@ -28,3 +56,17 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
 
     crud.delete_user(db, user)
     return {"detail": "User deleted"}
+
+@router.post("/login", response_model=schemas.User)
+def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
+    db_user = crud.get_user_by_email(db, user.email)
+
+    if not db_user:
+        raise HTTPException(status_code=400, detail="Email or password wrong")
+
+    if not verify_password(user.password, db_user.password_hash):
+        raise HTTPException(status_code=400, detail="Email or password wrong")
+
+    return db_user
+
+

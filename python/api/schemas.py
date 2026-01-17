@@ -7,13 +7,18 @@ class UserBase(BaseModel):
     email: str
 
 class UserCreate(UserBase):
-    password_hash: str
+    password: str
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
 
 class User(UserBase):
     id: int
     created_at: datetime
+
     class Config:
-        orm_mode = True
+        from_attributes = True  # pydantic v2
 
 class PlantBase(BaseModel):
     plant_name: str

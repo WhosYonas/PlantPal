@@ -43,12 +43,11 @@ def decode_token(token: str):
 
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    payload = decode_token(token)  # Decodes token into an object with user_id
-    user = crud.get_user_by_id(db, payload.user_id)
+    payload = decode_token(token)
+    user = crud.get_user(db, payload.user_id)  # Changed from get_user_by_id
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
     return user
-
 # Original authenticated endpoint
 @router.post("/", response_model=schemas.Plant)
 def create_plant(

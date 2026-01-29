@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { apiFetch } from "../API/client";
+import { Link } from "react-router-dom";
 
 export default function CreateUser() {
   const [email, setEmail] = useState("");
@@ -17,6 +18,11 @@ export default function CreateUser() {
 
   return (
     <div>
+      <div>
+        <Link to="/">
+          <button>Go Back</button>
+        </Link>
+      </div>
       <h1>Create user</h1>
 
       <input

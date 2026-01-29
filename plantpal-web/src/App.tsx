@@ -1,13 +1,30 @@
-import CreateUser from "./pages/CreateUser";
+// App.tsx
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Login from "./pages/Login";
+import CreateUser from "./pages/CreateUser";
 
-function App() {
+function Home() {
   return (
     <div>
-      <Login />
-      <CreateUser />
+      <h1>Welcome!</h1>
+      <Link to="/login">
+        <button>Login</button>
+      </Link>
+      <Link to="/create">
+        <button>Create User</button>
+      </Link>
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/create" element={<CreateUser />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}

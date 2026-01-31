@@ -26,7 +26,7 @@ class PlantBase(BaseModel):
     watering_interval_days: int
 
 class PlantCreate(PlantBase):
-    user_id: int
+    pass
 
 class Plant(PlantBase):
     id: int

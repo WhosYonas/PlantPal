@@ -1,4 +1,8 @@
-from sqlalchemy.orm import Session
+try:
+    from sqlalchemy.orm import Session
+except Exception:  # fallback for environments where SQLAlchemy isn't installed
+    from typing import Any as Session
+
 from models import User, Plant
 from schemas import UserCreate, PlantCreate
 
@@ -20,7 +24,6 @@ def get_plant_by_name(db: Session, user_id: int, name: str):
         Plant.user_id == user_id,
         Plant.plant_name == name
     ).first()
-
 
 def create_plant(db: Session, plant: PlantCreate, user_id: int):
     db_plant = Plant(

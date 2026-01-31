@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from database import SessionLocal
 import crud, schemas, models
 from passlib.context import CryptContext
+from auth import create_access_token, verify_password
 
 
 router = APIRouter()
@@ -15,8 +16,6 @@ pwd_context = CryptContext(
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -57,16 +56,13 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     crud.delete_user(db, user)
     return {"detail": "User deleted"}
 
-@router.post("/login", response_model=schemas.User)
+@router.post("/login")
 def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, user.email)
-
-    if not db_user:
+    if not db_user or not verify_password(user.password, db_user.password_hash):
         raise HTTPException(status_code=400, detail="Email or password wrong")
 
-    if not verify_password(user.password, db_user.password_hash):
-        raise HTTPException(status_code=400, detail="Email or password wrong")
-
-    return db_user
+    token = create_access_token({"user_id": db_user.id})
+    return {"access_token": token, "token_type": "bearer"}
 
 

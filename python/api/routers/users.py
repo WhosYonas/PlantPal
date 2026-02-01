@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from database import SessionLocal
 import crud, schemas, models
 from passlib.context import CryptContext
-from .auth import create_access_token
+from .auth import create_access_token, oauth2_scheme, decode_access_token
 
 
 router = APIRouter()
@@ -76,4 +76,13 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
     token = create_access_token({"user_id": db_user.id})
     return {"access_token": token, "token_type": "bearer"}
 
-
+@router.get("/me", response_model=schemas.User)
+def get_me(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
+    ):
+    user_id = decode_access_token(token)
+    user = crud.get_user(db, user_id)
+    if not user: 
+        raise HTTPException(status_code=404, detail="User not found")
+    return user

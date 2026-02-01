@@ -1,16 +1,24 @@
 import { useState } from "react";
 import { apiFetch } from "../API/client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   async function handleClick() {
-    await apiFetch("/users/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const data = await apiFetch("/users/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+
+      localStorage.setItem("token", data.access_token);
+      navigate("/dashboard");
+    } catch (err) {
+      alert("Login failed");
+    }
   }
 
   return (

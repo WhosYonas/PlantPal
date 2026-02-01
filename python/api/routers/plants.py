@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 from database import SessionLocal
 import crud, schemas
 from fastapi import Depends
-from auth import decode_access_token, oauth2_scheme
+from .auth import decode_access_token, oauth2_scheme
+
 
 router = APIRouter()
 

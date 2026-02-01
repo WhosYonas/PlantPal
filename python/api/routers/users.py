@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from database import SessionLocal
 import crud, schemas, models
 from passlib.context import CryptContext
-from auth import create_access_token, verify_password
+from .auth import create_access_token
 
 
 router = APIRouter()
@@ -14,12 +14,23 @@ pwd_context = CryptContext(
     deprecated="auto"
 )
 
+import bcrypt
+
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    """Hash a password using bcrypt."""
+    # Encode password to bytes and truncate to 72 bytes (bcrypt limit)
+    password_bytes = password.encode('utf-8')[:72]
+    # Generate salt and hash
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password_bytes, salt)
+    # Return as string
+    return hashed.decode('utf-8')
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Verify a password against a hash."""
+    password_bytes = plain_password.encode('utf-8')[:72]
+    hashed_bytes = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(password_bytes, hashed_bytes)
 
 def get_db():
     db = SessionLocal()

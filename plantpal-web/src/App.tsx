@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Login from "./pages/Login";
 import CreateUser from "./pages/CreateUser";
 import Dashboard from "./pages/Dashboard";
+import Plants from "./pages/Plants";
 
 function Home() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/create" element={<CreateUser />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/plants" element={<Plants />} />
       </Routes>
     </BrowserRouter>
   );

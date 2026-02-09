@@ -19,11 +19,17 @@ def delete_user(db: Session, user: User):
 def get_plant(db: Session, plant_id: int):
     return db.query(Plant).filter(Plant.id == plant_id).first()
 
+def get_plants(db: Session, user_id: int):
+    return db.query(Plant).filter(Plant.user_id == user_id).all()
+
 def get_plant_by_name(db: Session, user_id: int, name: str):
     return db.query(Plant).filter(
         Plant.user_id == user_id,
         Plant.plant_name == name
     ).first()
+
+def get_user_by_id(db: Session, user_id: int):
+    return db.query(User).filter(User.id == user_id).first()
 
 def create_plant(db: Session, plant: PlantCreate, user_id: int):
     db_plant = Plant(

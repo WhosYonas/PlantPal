@@ -33,4 +33,18 @@ class Plant(PlantBase):
     created_at: datetime
     owner: Optional[User]
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+class WateringBase(BaseModel):
+    watered_at: datetime
+    amount_ml: int
+
+class WateringEventCreate(WateringBase):
+    pass
+
+class WateringEvent(WateringBase):
+    id: int
+    plant_id: int
+    plant: Optional[Plant]  
+    class Config:
+        from_attributes = True

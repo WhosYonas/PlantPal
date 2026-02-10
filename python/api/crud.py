@@ -3,8 +3,8 @@ try:
 except Exception:  # fallback for environments where SQLAlchemy isn't installed
     from typing import Any as Session
 
-from models import User, Plant
-from schemas import UserCreate, PlantCreate
+from models import User, Plant, WateringEvent
+from schemas import PlantCreate, WateringEventCreate
 
 def get_user(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
@@ -27,6 +27,17 @@ def get_plant_by_name(db: Session, user_id: int, name: str):
         Plant.user_id == user_id,
         Plant.plant_name == name
     ).first()
+
+def create_watering_event(db: Session, watering_event: WateringEventCreate, plant_id: int):
+    db_watering_event = WateringEvent(
+        plant_id=plant_id,
+        watered_at=watering_event.watered_at, 
+        amount_ml=watering_event.amount_ml 
+    )
+    db.add(db_watering_event)
+    db.commit()
+    db.refresh(db_watering_event)
+    return db_watering_event
 
 def get_user_by_id(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()

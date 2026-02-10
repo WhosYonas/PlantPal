@@ -29,7 +29,7 @@ def create_plant(
     plant: schemas.PlantCreate,
     db: Session = Depends(get_db),
     current_user: schemas.User = Depends(get_current_user)
-):
+    ):
     db_plant = crud.get_plant_by_name(db, current_user.id, plant.plant_name)
     if db_plant:
         raise HTTPException(status_code=400, detail="Plant already exists")
@@ -39,6 +39,6 @@ def create_plant(
 def get_all_plants(
     db: Session = Depends(get_db), 
     current_user: schemas.User = Depends(get_current_user)
-):
+    ):
     plants = crud.get_plants(db, current_user.id)
     return plants

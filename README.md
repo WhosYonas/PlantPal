@@ -85,7 +85,7 @@ plantpal/
 ### Prerequisites
 - Python 3.8+
 - PostgreSQL
-- Node.js 16+
+- Node.js 18+
 - npm or yarn
 
 ### Backend Setup

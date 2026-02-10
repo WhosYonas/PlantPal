@@ -11,20 +11,47 @@ export default function Dashboard() {
       .then(setUser)
       .catch(() => {
         localStorage.removeItem("token");
+        navigate("/login");
       });
-  }, []);
+  }, [navigate]);
 
-  async function handleClick() {
+  function handleCheckPlants() {
     navigate("/plants");
   }
 
-  if (!user) return <p>Loading...</p>;
+  function handleLogout() {
+    localStorage.removeItem("token");
+    navigate("/");
+  }
+
+  if (!user) {
+    return (
+      <div className="loading-container">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h1>WELCOME {user.email}</h1>
-      <div>
-        <button onClick={handleClick}>Check plants</button>
+    <div className="dashboard-container">
+      <div className="dashboard-card">
+        <h1>🌿 Welcome back!</h1>
+        <p style={{ color: "#666", fontSize: "1.1rem" }}>{user.email}</p>
+
+        <div className="dashboard-actions">
+          <button className="dashboard-button" onClick={handleCheckPlants}>
+            🪴 Check My Plants
+          </button>
+          <button
+            className="dashboard-button"
+            onClick={() => navigate("/watering")}
+          >
+            💧 Water Plants
+          </button>
+          <button className="logout-button" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -5,17 +5,19 @@ import CreateUser from "./pages/CreateUser";
 import Dashboard from "./pages/Dashboard";
 import Plants from "./pages/Plants";
 import Watering from "./pages/WateringEvent";
-
+import "./App.css";
 function Home() {
   return (
-    <div>
-      <h1>Welcome!</h1>
-      <Link to="/login">
-        <button>Login</button>
-      </Link>
-      <Link to="/create">
-        <button>Create User</button>
-      </Link>
+    <div className="home-container">
+      <h1>🌱 Plant Care Tracker</h1>
+      <div className="button-group">
+        <Link to="/login">
+          <button>Login</button>
+        </Link>
+        <Link to="/create">
+          <button>Create User</button>
+        </Link>
+      </div>
     </div>
   );
 }

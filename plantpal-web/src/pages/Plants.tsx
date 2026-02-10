@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiFetch } from "../API/client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Plants() {
   const [user, setUser] = useState<any>(null);
@@ -8,14 +8,16 @@ export default function Plants() {
   const [plant_name, setPlantName] = useState("");
   const [plant_species, setPlantSpecies] = useState("");
   const [watering_interval_days, setWateringDays] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     apiFetch("/users/me")
       .then(setUser)
       .catch(() => {
         localStorage.removeItem("token");
+        navigate("/login");
       });
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (user) {
@@ -32,74 +34,108 @@ export default function Plants() {
     }
   }
 
-  if (!user) return <p>Loading...</p>;
-
   async function handleCreatePlant() {
-    await apiFetch("/plants/createPlant", {
-      method: "POST",
-      body: JSON.stringify({
-        plant_name,
-        plant_species,
-        watering_interval_days: parseInt(watering_interval_days),
-      }),
-    });
+    if (!plant_name || !plant_species || !watering_interval_days) {
+      alert("Please fill in all fields");
+      return;
+    }
 
-    // Clear form
-    setPlantName("");
-    setPlantSpecies("");
-    setWateringDays("");
+    try {
+      await apiFetch("/plants/createPlant", {
+        method: "POST",
+        body: JSON.stringify({
+          plant_name,
+          plant_species,
+          watering_interval_days: parseInt(watering_interval_days),
+        }),
+      });
 
-    // Refresh the list
-    loadPlants();
+      // Clear form
+      setPlantName("");
+      setPlantSpecies("");
+      setWateringDays("");
+
+      // Refresh the list
+      loadPlants();
+    } catch (error) {
+      alert("Failed to create plant");
+    }
+  }
+
+  if (!user) {
+    return (
+      <div className="loading-container">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <div>
-        <Link to="/">
-          <button>Go Back</button>
+    <div className="plants-container">
+      <div className="plants-header">
+        <h1>🪴 My Plants</h1>
+        <Link to="/dashboard">
+          <button className="back-button-plants">← Dashboard</button>
         </Link>
       </div>
-      <h1>Create Plant</h1>
 
-      <input
-        placeholder="Plant name"
-        value={plant_name}
-        onChange={(e) => setPlantName(e.target.value)}
-      />
+      <div className="create-plant-card">
+        <h2>🌱 Add New Plant</h2>
+        <div className="plant-form">
+          <input
+            placeholder="Plant name (e.g., Sunny the Succulent)"
+            value={plant_name}
+            onChange={(e) => setPlantName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Plant species (e.g., Aloe Vera)"
+            value={plant_species}
+            onChange={(e) => setPlantSpecies(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Watering interval (days)"
+            value={watering_interval_days}
+            onChange={(e) => setWateringDays(e.target.value)}
+          />
+          <button className="primary-button" onClick={handleCreatePlant}>
+            Add Plant
+          </button>
+        </div>
+      </div>
 
-      <input
-        type="text"
-        placeholder="Plant species"
-        value={plant_species}
-        onChange={(e) => setPlantSpecies(e.target.value)}
-      />
+      <div className="plants-list-card">
+        <h2>🌿 Your Garden</h2>
+        {plants.length === 0 ? (
+          <div className="empty-state">
+            <p>No plants yet. Add your first plant above! 🌱</p>
+          </div>
+        ) : (
+          <div>
+            {plants.map((plant) => (
+              <div key={plant.id} className="plant-item">
+                <strong>🌿 {plant.plant_name}</strong>
+                <div className="plant-item-details">
+                  <span>{plant.plant_species}</span>
+                  <span> • </span>
+                  <span>
+                    💧 Water every {plant.watering_interval_days} days
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-      <input
-        placeholder="Watering interval"
-        value={watering_interval_days}
-        onChange={(e) => setWateringDays(e.target.value)}
-      />
-
-      <button onClick={handleCreatePlant}>Create Plant</button>
-
-      <h2>My Plants</h2>
-      {plants.length === 0 ? (
-        <p>No plants yet. Create one above!</p>
-      ) : (
-        <ul>
-          {plants.map((plant) => (
-            <li key={plant.id}>
-              <strong>{plant.plant_name}</strong> - {plant.plant_species}
-              (Water every {plant.watering_interval_days} days)
-            </li>
-          ))}
-        </ul>
+      {plants.length > 0 && (
+        <div className="water-action">
+          <Link to="/watering">
+            <button>💧 Water My Plants</button>
+          </Link>
+        </div>
       )}
-
-      <Link to="/watering">
-        <button>Water Plant</button>
-      </Link>
     </div>
   );
 }

@@ -6,41 +6,48 @@ export default function CreateUser() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  //Handle click sends the request to the api endpoint with the body
-  //created from user input, so when we click setEmail changes the
-  //value of email to whatever the user input
   async function handleClick() {
-    await apiFetch("/users/", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      await apiFetch("/users/", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+      alert("User created successfully!");
+      setPassword("");
+      setEmail("");
+    } catch (err) {
+      alert("Failed to create user");
+    }
   }
 
   return (
-    <div>
-      <div>
-        <Link to="/">
-          <button>Go Back</button>
-        </Link>
+    <div className="auth-container">
+      <Link to="/">
+        <button className="back-button">← Go Back</button>
+      </Link>
+
+      <div className="auth-card">
+        <h1>🌱 Create Account</h1>
+
+        <div className="input-group">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        <button className="primary-button" onClick={handleClick}>
+          Create Account
+        </button>
       </div>
-      <h1>Create user</h1>
-
-      <input
-        placeholder="Email"
-        value={email}
-        //Onchange changes the input fields value every time we change it
-        //using set email
-        onChange={(e) => setEmail(e.target.value)}
-      />
-
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-      <button onClick={handleClick}>Create User</button>
     </div>
   );
 }

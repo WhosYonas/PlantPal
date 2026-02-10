@@ -13,7 +13,6 @@ export default function Login() {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
-
       localStorage.setItem("token", data.access_token);
       navigate("/dashboard");
     } catch (err) {
@@ -22,24 +21,33 @@ export default function Login() {
   }
 
   return (
-    <div>
-      <div>
-        <Link to="/">
-          <button>Go Back</button>
-        </Link>
+    <div className="auth-container">
+      <Link to="/">
+        <button className="back-button">← Go Back</button>
+      </Link>
+
+      <div className="auth-card">
+        <h1>🌿 Login</h1>
+
+        <div className="input-group">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        <button className="primary-button" onClick={handleClick}>
+          Log in
+        </button>
       </div>
-      <h1>Login</h1>
-      <input
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleClick}>Log in</button>
     </div>
   );
 }

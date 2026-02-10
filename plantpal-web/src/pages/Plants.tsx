@@ -96,6 +96,10 @@ export default function Plants() {
           ))}
         </ul>
       )}
+
+      <Link to="/watering">
+        <button>Water Plant</button>
+      </Link>
     </div>
   );
 }

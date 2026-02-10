@@ -58,12 +58,14 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     crud.delete_user(db, user)
     return {"detail": "User deleted"}
 
+# In routers/users.py
+
 @router.post("/login")
 def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),  # Changed this line
+    form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
-    # form_data.username will contain the email
+    # OAuth2 form login for Swagger UI
     db_user = crud.get_user_by_email(db, form_data.username)
     if not db_user or not verify_password(form_data.password, db_user.password_hash):
         raise HTTPException(status_code=400, detail="Email or password wrong")
@@ -71,6 +73,17 @@ def login(
     token = create_access_token({"user_id": db_user.id})
     return {"access_token": token, "token_type": "bearer"}
 
+@router.post("/login/json")  # New endpoint for frontend
+def login_json(
+    user: schemas.UserLogin,
+    db: Session = Depends(get_db)
+):
+    db_user = crud.get_user_by_email(db, user.email)
+    if not db_user or not verify_password(user.password, db_user.password_hash):
+        raise HTTPException(status_code=400, detail="Email or password wrong")
+    
+    token = create_access_token({"user_id": db_user.id})
+    return {"access_token": token, "token_type": "bearer"}
 @router.get("/me", response_model=schemas.User)
 def get_me(
     token: str = Depends(oauth2_scheme),

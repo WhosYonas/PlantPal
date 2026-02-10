@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import CreateUser from "./pages/CreateUser";
 import Dashboard from "./pages/Dashboard";
 import Plants from "./pages/Plants";
+import Watering from "./pages/WateringEvent";
 
 function Home() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/create" element={<CreateUser />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/plants" element={<Plants />} />
+        <Route path="/watering" element={<Watering />} />
       </Routes>
     </BrowserRouter>
   );

@@ -9,7 +9,7 @@ export default function Login() {
 
   async function handleClick() {
     try {
-      const data = await apiFetch("/users/login", {
+      const data = await apiFetch("/users/login/json", {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });

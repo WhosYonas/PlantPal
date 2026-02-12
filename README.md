@@ -186,4 +186,3 @@ Yonas
 
 ---
 
-**Note**: Remember to change the `SECRET_KEY` in `auth.py` before deploying to production!

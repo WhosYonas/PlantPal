@@ -170,7 +170,7 @@ This application is still under development. Planned features include:
 - Plant watering history view
 - Plant photos
 - Care tips and reminders
-- Mobile app version
+- Mobile version
 
 ## 🤝 Contributing
 

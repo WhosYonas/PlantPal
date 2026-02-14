@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # ---------------- Database Setup ----------------
-DATABASE_URL = "postgresql://Yonas:Yonaselias12@localhost:5432/plantpal"
+DATABASE_URL = "postgresql://X:X@localhost:5432/plantpal"
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)

@@ -9,7 +9,8 @@ import "./App.css";
 function Home() {
   return (
     <div className="home-container">
-      <h1>🌱 Plant Care Tracker</h1>
+      <h1>PlantPal</h1>
+      <h2>Your Plant Care Tracker</h2>
       <div className="button-group">
         <Link to="/login">
           <button>Login</button>

@@ -106,7 +106,7 @@ export default function Plants() {
       </div>
 
       <div className="plants-list-card">
-        <h2>🌿 Your Garden</h2>
+        <h2> Your Garden</h2>
         {plants.length === 0 ? (
           <div className="empty-state">
             <p>No plants yet. Add your first plant above! 🌱</p>
@@ -115,7 +115,7 @@ export default function Plants() {
           <div>
             {plants.map((plant) => (
               <div key={plant.id} className="plant-item">
-                <strong>🌿 {plant.plant_name}</strong>
+                <strong> {plant.plant_name}</strong>
                 <div className="plant-item-details">
                   <span>{plant.plant_species}</span>
                   <span> • </span>

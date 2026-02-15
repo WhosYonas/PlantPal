@@ -9,7 +9,6 @@ body,
 html {
   margin: 0;
   padding: 0;
-  height: 100%;
 }
 
 body {
@@ -261,6 +260,7 @@ input::placeholder {
 }
 
 /* =========================Plants page styles=========================== */
+
 .plants-container {
   min-height: 100vh;
   padding: 40px 20px;
@@ -321,6 +321,8 @@ input::placeholder {
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
+  overflow-y: auto;
+  max-height: 400px;
 }
 
 .plants-list-card h2 {

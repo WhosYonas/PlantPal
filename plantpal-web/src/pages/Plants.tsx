@@ -116,6 +116,7 @@ export default function Plants() {
             {plants.map((plant) => (
               <div key={plant.id} className="plant-item">
                 <button
+                  className="plant-button"
                   onClick={() =>
                     navigate("/watering", { state: { plantId: plant.id } })
                   }

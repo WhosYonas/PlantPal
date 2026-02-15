@@ -44,6 +44,13 @@ body {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.home-container h2 {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 .button-group {
   display: flex;
   gap: 1rem;
@@ -51,8 +58,8 @@ body {
 }
 
 button {
-  background: white;
-  color: #667eea;
+  background: linear-gradient(135deg, #f703ce 0%, #fd0419 100%);
+  color: #37383a;
   border: none;
   padding: 12px 32px;
   font-size: 1.1rem;
@@ -66,7 +73,7 @@ button {
 button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  background: #f8f9fa;
+  background: #13293f;
 }
 
 button:active {
@@ -332,6 +339,11 @@ input::placeholder {
   margin-top: 0;
 }
 
+.plant-button {
+  background: linear-gradient(135deg, #4302f5, #e0e0e0);
+  color: #e0e0e0;
+}
+
 .plant-item {
   background: #f8f9fa;
   padding: 1.25rem;
@@ -358,98 +370,37 @@ input::placeholder {
   font-size: 0.95rem;
 }
 
-.empty-state {
-  text-align: center;
-  color: #999;
-  padding: 3rem 1rem;
-  font-size: 1.1rem;
-}
-
-.water-action {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-.water-action button {
-  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
-  font-size: 1.2rem;
-  padding: 14px 40px;
-}
-
-.water-action button:hover {
-  box-shadow: 0 8px 16px rgba(78, 205, 196, 0.3);
-}
-
-/* Watering page styles */
+/*==============================WATERING=====================*/
 .watering-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
-  padding: 20px;
+  padding: 40px 20px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.watering-card {
-  background: rgb(8, 8, 8);
-  padding: 3rem 2.5rem;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 500px;
-  position: relative;
-}
-
-.watering-card h1 {
-  color: #4ecdc4;
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.watering-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-select {
-  padding: 14px 18px;
-  font-size: 1rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  font-family: inherit;
-  background: rgb(104, 102, 102);
-  cursor: pointer;
-}
-
-select:focus {
-  outline: none;
-  border-color: #4ecdc4;
-  box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+.watering-container h1 {
+  color: #000000;
 }
 
 .water-button {
-  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
-  color: white;
-  width: 100%;
-  padding: 14px;
-  font-size: 1.1rem;
-  margin-top: 0.5rem;
+  background: linear-gradient(135deg, #f80191, #2e01f8);
+}
+.watering-card {
+  background: rgb(245, 245, 247);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(250, 245, 245, 0.1);
+  margin-bottom: 2rem;
+  max-height: 400px;
+  animation: pulse 2s ease-in-out infinite;
 }
 
-.water-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(78, 205, 196, 0.3);
-}
-
-.success-message {
-  background: #d4edda;
-  color: #155724;
-  padding: 12px;
-  border-radius: 8px;
-  text-align: center;
-  margin-bottom: 1rem;
-  border: 1px solid #c3e6cb;
+@keyframes watering-card {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }

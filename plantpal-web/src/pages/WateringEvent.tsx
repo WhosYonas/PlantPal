@@ -75,29 +75,6 @@ export default function Watering() {
     );
   }
 
-  if (!plantId || !plant) {
-    return (
-      <div className="watering-container">
-        <Link to="/plants">
-          <button className="back-button">← Back to Plants</button>
-        </Link>
-        <div className="watering-card">
-          <h1>Water Your Plants</h1>
-          <div className="empty-state">
-            <p>
-              No plant selected. Please select a plant from the plants page.
-            </p>
-            <Link to="/plants">
-              <button className="primary-button" style={{ marginTop: "1rem" }}>
-                Go to Plants
-              </button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="watering-container">
       <Link to="/plants">

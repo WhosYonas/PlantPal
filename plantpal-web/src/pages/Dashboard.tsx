@@ -42,12 +42,6 @@ export default function Dashboard() {
           <button className="dashboard-button" onClick={handleCheckPlants}>
             Check My Plants
           </button>
-          <button
-            className="dashboard-button"
-            onClick={() => navigate("/watering")}
-          >
-            Water Plants
-          </button>
           <button className="logout-button" onClick={handleLogout}>
             Logout
           </button>

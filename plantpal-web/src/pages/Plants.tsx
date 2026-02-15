@@ -73,14 +73,14 @@ export default function Plants() {
   return (
     <div className="plants-container">
       <div className="plants-header">
-        <h1>🪴 My Plants</h1>
+        <h1>My Plants</h1>
         <Link to="/dashboard">
           <button className="back-button-plants">← Dashboard</button>
         </Link>
       </div>
 
       <div className="create-plant-card">
-        <h2>🌱 Add New Plant</h2>
+        <h2>Add New Plant</h2>
         <div className="plant-form">
           <input
             placeholder="Plant name (e.g., Sunny the Succulent)"
@@ -125,9 +125,7 @@ export default function Plants() {
                 <div className="plant-item-details">
                   <span>{plant.plant_species}</span>
                   <span> • </span>
-                  <span>
-                    💧 Water every {plant.watering_interval_days} days
-                  </span>
+                  <span>Water every {plant.watering_interval_days} days</span>
                 </div>
               </div>
             ))}

@@ -83,7 +83,7 @@ export default function Watering() {
           <button className="back-button">← Back to Plants</button>
         </Link>
         <div className="watering-card">
-          <h1>💧 Water Your Plants</h1>
+          <h1>Water Your Plants</h1>
           <div className="empty-state">
             <p>
               No plant selected. Please select a plant from the plants page.
@@ -106,12 +106,10 @@ export default function Watering() {
       </Link>
 
       <div className="watering-card">
-        <h1>💧 Water Your Plant</h1>
+        <h1>Water Your Plant</h1>
 
         {showSuccess && (
-          <div className="success-message">
-            ✅ Watering recorded successfully!
-          </div>
+          <div className="success-message">Watering recorded successfully!</div>
         )}
 
         <div className="watering-form">
@@ -124,13 +122,13 @@ export default function Watering() {
             }}
           >
             <h2 style={{ margin: "0 0 8px 0", fontSize: "1.2rem" }}>
-              🌿 {plant.plant_name}
+              {plant.plant_name}
             </h2>
             <p style={{ margin: "4px 0", color: "#666" }}>
               Species: {plant.plant_species}
             </p>
             <p style={{ margin: "4px 0", color: "#666" }}>
-              💧 Needs water every {plant.watering_interval_days} days
+              Needs water every {plant.watering_interval_days} days
             </p>
           </div>
 
@@ -142,7 +140,7 @@ export default function Watering() {
           />
 
           <button className="water-button" onClick={handleCreateWatering}>
-            💦 Record Watering
+            Record Watering
           </button>
         </div>
       </div>

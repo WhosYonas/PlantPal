@@ -35,18 +35,18 @@ export default function Dashboard() {
   return (
     <div className="dashboard-container">
       <div className="dashboard-card">
-        <h1>🌿 Welcome back!</h1>
+        <h1>Welcome back!</h1>
         <p style={{ color: "#666", fontSize: "1.1rem" }}>{user.email}</p>
 
         <div className="dashboard-actions">
           <button className="dashboard-button" onClick={handleCheckPlants}>
-            🪴 Check My Plants
+            Check My Plants
           </button>
           <button
             className="dashboard-button"
             onClick={() => navigate("/watering")}
           >
-            💧 Water Plants
+            Water Plants
           </button>
           <button className="logout-button" onClick={handleLogout}>
             Logout

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { apiFetch } from "../API/client";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -10,7 +10,6 @@ export default function Watering() {
   const [amount_ml, setAmountMl] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (plantId) {

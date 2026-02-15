@@ -89,24 +89,13 @@ export default function Watering() {
         )}
 
         <div className="watering-form">
-          <div
-            style={{
-              background: "#e8f5e9",
-              padding: "16px",
-              borderRadius: "8px",
-              marginBottom: "1rem",
-            }}
-          >
-            <h2 style={{ margin: "0 0 8px 0", fontSize: "1.2rem" }}>
-              {plant.plant_name}
-            </h2>
-            <p style={{ margin: "4px 0", color: "#666" }}>
-              Species: {plant.plant_species}
-            </p>
-            <p style={{ margin: "4px 0", color: "#666" }}>
-              Needs water every {plant.watering_interval_days} days
-            </p>
-          </div>
+          {plant && (
+            <div className="plant-info">
+              <h2>{plant.plant_name}</h2>
+              <p>Species: {plant.plant_species}</p>
+              <p>Needs water every {plant.watering_interval_days} days</p>
+            </div>
+          )}
 
           <input
             type="number"

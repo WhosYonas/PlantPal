@@ -1,5 +1,6 @@
 import jwt
 import os
+from dotenv import load_dotenv
 
 from datetime import datetime, timedelta, timezone
 try:
@@ -20,6 +21,8 @@ except Exception:
         def _dummy():
             return None
         return _dummy
+    
+load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 

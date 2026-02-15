@@ -42,3 +42,19 @@ def get_all_plants(
     ):
     plants = crud.get_plants(db, current_user.id)
     return plants
+
+@router.get("/getPlantById", response_model=schemas.Plant)
+def get_plant(
+    plant_id: int,  
+    db: Session = Depends(get_db),
+    current_user: schemas.User = Depends(get_current_user)
+):
+    plant = crud.get_plant(db, plant_id)
+    
+    if not plant:
+        raise HTTPException(status_code=404, detail="Plant not found")
+    
+    if plant.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to view this plant")
+    
+    return plant

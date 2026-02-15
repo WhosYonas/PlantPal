@@ -391,7 +391,7 @@ input::placeholder {
 }
 
 .watering-card {
-  background: white;
+  background: rgb(8, 8, 8);
   padding: 3rem 2.5rem;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -420,7 +420,7 @@ select {
   border-radius: 10px;
   transition: all 0.3s ease;
   font-family: inherit;
-  background: white;
+  background: rgb(104, 102, 102);
   cursor: pointer;
 }
 

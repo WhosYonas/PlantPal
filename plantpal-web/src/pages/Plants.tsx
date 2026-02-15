@@ -115,7 +115,13 @@ export default function Plants() {
           <div>
             {plants.map((plant) => (
               <div key={plant.id} className="plant-item">
-                <strong> {plant.plant_name}</strong>
+                <button
+                  onClick={() =>
+                    navigate("/watering", { state: { plantId: plant.id } })
+                  }
+                >
+                  {plant.plant_name}
+                </button>
                 <div className="plant-item-details">
                   <span>{plant.plant_species}</span>
                   <span> • </span>
@@ -128,14 +134,6 @@ export default function Plants() {
           </div>
         )}
       </div>
-
-      {plants.length > 0 && (
-        <div className="water-action">
-          <Link to="/watering">
-            <button>💧 Water My Plants</button>
-          </Link>
-        </div>
-      )}
     </div>
   );
 }

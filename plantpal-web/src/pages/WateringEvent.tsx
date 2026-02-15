@@ -1,40 +1,49 @@
 import { Link, useNavigate } from "react-router-dom";
 import { apiFetch } from "../API/client";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function Watering() {
-  const [plants, setPlants] = useState<any[]>([]);
-  const [plant_id, setPlantid] = useState("");
+  const location = useLocation();
+  const { plantId } = location.state || {}; // plantId from previous page
+  const [plant, setPlant] = useState<any>(null);
   const [amount_ml, setAmountMl] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    loadPlants();
-  }, []);
+    if (plantId) {
+      loadPlant();
+    } else {
+      setLoading(false);
+    }
+  }, [plantId]);
 
-  async function loadPlants() {
+  async function loadPlant() {
     try {
-      const data = await apiFetch("/plants/getPlants");
-      setPlants(data);
-      // Auto-select first plant if available
-      if (data.length > 0) {
-        setPlantid(data[0].id.toString());
-      }
+      setLoading(true);
+      const plantData = await apiFetch(
+        `/plants/getPlantById?plant_id=${plantId}`,
+      );
+      setPlant(plantData);
     } catch (error) {
-      console.error("Failed to load plants:", error);
+      console.error("Failed to load plant:", error);
+      alert("Failed to load plant");
+    } finally {
+      setLoading(false);
     }
   }
 
   async function handleCreateWatering() {
-    if (!plant_id || !amount_ml) {
+    if (!plantId || !amount_ml) {
       alert("Please fill in all fields");
       return;
     }
 
     try {
       await apiFetch(
-        `/watering-events/createWateringEvent?plant_id=${plant_id}`,
+        `/watering-events/createWateringEvent?plant_id=${plantId}`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -57,7 +66,38 @@ export default function Watering() {
     }
   }
 
-  const selectedPlant = plants.find((p) => p.id.toString() === plant_id);
+  if (loading) {
+    return (
+      <div className="watering-container">
+        <div className="watering-card">
+          <p>Loading plant...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!plantId || !plant) {
+    return (
+      <div className="watering-container">
+        <Link to="/plants">
+          <button className="back-button">← Back to Plants</button>
+        </Link>
+        <div className="watering-card">
+          <h1>💧 Water Your Plants</h1>
+          <div className="empty-state">
+            <p>
+              No plant selected. Please select a plant from the plants page.
+            </p>
+            <Link to="/plants">
+              <button className="primary-button" style={{ marginTop: "1rem" }}>
+                Go to Plants
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="watering-container">
@@ -66,7 +106,7 @@ export default function Watering() {
       </Link>
 
       <div className="watering-card">
-        <h1>💧 Water Your Plants</h1>
+        <h1>💧 Water Your Plant</h1>
 
         {showSuccess && (
           <div className="success-message">
@@ -74,54 +114,37 @@ export default function Watering() {
           </div>
         )}
 
-        {plants.length === 0 ? (
-          <div className="empty-state">
-            <p>No plants found. Add a plant first!</p>
-            <Link to="/plants">
-              <button className="primary-button" style={{ marginTop: "1rem" }}>
-                Go to Plants
-              </button>
-            </Link>
+        <div className="watering-form">
+          <div
+            style={{
+              background: "#e8f5e9",
+              padding: "16px",
+              borderRadius: "8px",
+              marginBottom: "1rem",
+            }}
+          >
+            <h2 style={{ margin: "0 0 8px 0", fontSize: "1.2rem" }}>
+              🌿 {plant.plant_name}
+            </h2>
+            <p style={{ margin: "4px 0", color: "#666" }}>
+              Species: {plant.plant_species}
+            </p>
+            <p style={{ margin: "4px 0", color: "#666" }}>
+              💧 Needs water every {plant.watering_interval_days} days
+            </p>
           </div>
-        ) : (
-          <div className="watering-form">
-            <select
-              value={plant_id}
-              onChange={(e) => setPlantid(e.target.value)}
-            >
-              {plants.map((plant) => (
-                <option key={plant.id} value={plant.id}>
-                  🌿 {plant.plant_name} ({plant.plant_species})
-                </option>
-              ))}
-            </select>
 
-            {selectedPlant && (
-              <div
-                style={{
-                  background: "#f0f8ff",
-                  padding: "12px",
-                  borderRadius: "8px",
-                  fontSize: "0.9rem",
-                  color: "#666",
-                }}
-              >
-                💧 Needs water every {selectedPlant.watering_interval_days} days
-              </div>
-            )}
+          <input
+            type="number"
+            placeholder="Amount (ml)"
+            value={amount_ml}
+            onChange={(e) => setAmountMl(e.target.value)}
+          />
 
-            <input
-              type="number"
-              placeholder="Amount (ml)"
-              value={amount_ml}
-              onChange={(e) => setAmountMl(e.target.value)}
-            />
-
-            <button className="water-button" onClick={handleCreateWatering}>
-              💦 Record Watering
-            </button>
-          </div>
-        )}
+          <button className="water-button" onClick={handleCreateWatering}>
+            💦 Record Watering
+          </button>
+        </div>
       </div>
     </div>
   );

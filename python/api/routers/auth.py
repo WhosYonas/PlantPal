@@ -1,4 +1,6 @@
 import jwt
+import os
+
 from datetime import datetime, timedelta, timezone
 try:
     from fastapi import HTTPException, Depends
@@ -15,12 +17,15 @@ except Exception:
         return dependency
 
     def OAuth2PasswordBearer(tokenUrl: str):
-        # minimal callable placeholder compatible with dependency injection usage
         def _dummy():
             return None
         return _dummy
 
-SECRET_KEY = "your-super-secret-key"
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY is not set")
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 

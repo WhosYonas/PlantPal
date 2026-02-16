@@ -28,6 +28,15 @@ def get_plant_by_name(db: Session, user_id: int, name: str):
         Plant.plant_name == name
     ).first()
 
+def get_latest_watering_event(db: Session, plant_id: int):
+    return (
+        db.query(WateringEvent)
+        .filter(WateringEvent.plant_id == plant_id)
+        .order_by(WateringEvent.watered_at.desc())
+        .first()
+    )
+
+
 def create_watering_event(db: Session, watering_event: WateringEventCreate, plant_id: int):
     db_watering_event = WateringEvent(
         plant_id=plant_id,

@@ -10,10 +10,11 @@ export default function Watering() {
   const [amount_ml, setAmountMl] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const [last_watered, setLastWatered] = useState<any>(null);
   useEffect(() => {
     if (plantId) {
       loadPlant();
+      lastWatered();
     } else {
       setLoading(false);
     }
@@ -29,6 +30,20 @@ export default function Watering() {
     } catch (error) {
       console.error("Failed to load plant:", error);
       alert("Failed to load plant");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function lastWatered() {
+    try {
+      setLoading(true);
+      const last_watered_at = await apiFetch(
+        `/watering-events/lastWatered?plant_id=${plantId}`,
+      );
+      setLastWatered(last_watered_at);
+    } catch (error) {
+      console.error("Failed to fetch latest watering");
     } finally {
       setLoading(false);
     }
@@ -52,6 +67,7 @@ export default function Watering() {
         },
       );
 
+      await lastWatered();
       // Show success message
       setShowSuccess(true);
       setAmountMl("");
@@ -94,6 +110,12 @@ export default function Watering() {
               <h2>{plant.plant_name}</h2>
               <p>Species: {plant.plant_species}</p>
               <p>Needs water every {plant.watering_interval_days} days</p>
+              <p>
+                Watered last:{" "}
+                {last_watered
+                  ? new Date(last_watered.watered_at).toLocaleString()
+                  : "Never"}
+              </p>
             </div>
           )}
 

@@ -35,3 +35,10 @@ def create_watering_event(
         raise HTTPException(status_code=403, detail="Not authorized to water this plant")
     
     return crud.create_watering_event(db, watering_event, plant_id)
+
+@router.get("/lastWatered", response_model=schemas.WateringEvent)
+def last_watered(
+    plant_id: int,
+    db: Session = Depends(get_db)
+    ):
+    return crud.get_latest_watering_event(db, plant_id)

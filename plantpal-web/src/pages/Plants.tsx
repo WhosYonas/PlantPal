@@ -7,6 +7,11 @@ export default function Plants() {
   const [plants, setPlants] = useState<any[]>([]);
   const [plant_name, setPlantName] = useState("");
   const [plant_species, setPlantSpecies] = useState("");
+
+  const [selectedSpecies, setSelectedSpecies] = useState<any | null>(null);
+  const [speciesQuery, setSpeciesQuery] = useState("");
+  const [speciesResults, setSpeciesResults] = useState<any[]>([]);
+
   const [watering_interval_days, setWateringDays] = useState("");
   const navigate = useNavigate();
 
@@ -25,6 +30,26 @@ export default function Plants() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!speciesQuery) {
+      setSpeciesResults([]);
+      return;
+    }
+
+    const timeout = setTimeout(async () => {
+      try {
+        const results = await apiFetch(
+          `/plants/trefle/search?q=${encodeURIComponent(speciesQuery)}`,
+        );
+        setSpeciesResults(results.data);
+      } catch (err) {
+        console.error("Species search failed", err);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [speciesQuery]);
+
   async function loadPlants() {
     try {
       const data = await apiFetch("/plants/getPlants");
@@ -35,7 +60,7 @@ export default function Plants() {
   }
 
   async function handleCreatePlant() {
-    if (!plant_name || !plant_species || !watering_interval_days) {
+    if (!plant_name || !selectedSpecies || !watering_interval_days) {
       alert("Please fill in all fields");
       return;
     }
@@ -45,14 +70,13 @@ export default function Plants() {
         method: "POST",
         body: JSON.stringify({
           plant_name,
-          plant_species,
+          plant_species: selectedSpecies.scientific_name,
           watering_interval_days: parseInt(watering_interval_days),
         }),
       });
 
       // Clear form
       setPlantName("");
-      setPlantSpecies("");
       setWateringDays("");
 
       // Refresh the list
@@ -60,6 +84,12 @@ export default function Plants() {
     } catch (error) {
       alert("Failed to create plant");
     }
+  }
+
+  function handleSelectSpecies(species: any) {
+    setSelectedSpecies(species);
+    setSpeciesQuery(species.scientific_name);
+    setSpeciesResults([]);
   }
 
   if (!user) {
@@ -88,11 +118,26 @@ export default function Plants() {
             onChange={(e) => setPlantName(e.target.value)}
           />
           <input
-            type="text"
-            placeholder="Plant species (e.g., Aloe Vera)"
-            value={plant_species}
-            onChange={(e) => setPlantSpecies(e.target.value)}
+            placeholder="Search species..."
+            value={speciesQuery}
+            onChange={(e) => {
+              setSpeciesQuery(e.target.value);
+              setSelectedSpecies(null);
+            }}
           />
+          {speciesResults.length > 0 && (
+            <div className="species-dropdown">
+              {speciesResults.map((species) => (
+                <div
+                  key={species.id}
+                  className="species-option"
+                  onClick={() => handleSelectSpecies(species)}
+                >
+                  {species.common_name || "Unknown"} — {species.scientific_name}
+                </div>
+              ))}
+            </div>
+          )}
           <input
             type="number"
             placeholder="Watering interval (days)"

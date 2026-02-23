@@ -5,9 +5,14 @@ from sqlalchemy.orm import Session
 from database import SessionLocal
 import crud, schemas
 from .auth import decode_access_token, oauth2_scheme
+import httpx 
+import os
+
 
 
 router = APIRouter()
+TREFLE_TOKEN = os.getenv("TREFLE_TOKEN")
+
 
 def get_db():
     db = SessionLocal()
@@ -58,3 +63,12 @@ def get_plant(
         raise HTTPException(status_code=403, detail="Not authorized to view this plant")
     
     return plant
+
+@router.get("/trefle/search")
+async def search_plants(q: str):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "https://trefle.io/api/v1/plants/search",
+            params={"q": q, "token": TREFLE_TOKEN},
+        )
+        return response.json()

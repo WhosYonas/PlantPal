@@ -22,3 +22,9 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
 
   return res.json();
 }
+
+//TREFLE FETCH
+
+export async function searchPlants(query: string) {
+  return apiFetch(`/plants/search?q=${encodeURIComponent(query)}`);
+}

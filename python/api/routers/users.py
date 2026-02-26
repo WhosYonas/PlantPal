@@ -84,6 +84,7 @@ def login_json(
     
     token = create_access_token({"user_id": db_user.id})
     return {"access_token": token, "token_type": "bearer"}
+
 @router.get("/me", response_model=schemas.User)
 def get_me(
     token: str = Depends(oauth2_scheme),

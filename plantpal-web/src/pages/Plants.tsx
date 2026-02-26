@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { apiFetch } from "../API/client";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -6,7 +6,6 @@ export default function Plants() {
   const [user, setUser] = useState<any>(null);
   const [plants, setPlants] = useState<any[]>([]);
   const [plant_name, setPlantName] = useState("");
-  const [plant_species, setPlantSpecies] = useState("");
 
   const [selectedSpecies, setSelectedSpecies] = useState<any | null>(null);
   const [speciesQuery, setSpeciesQuery] = useState("");
@@ -14,6 +13,21 @@ export default function Plants() {
 
   const [watering_interval_days, setWateringDays] = useState("");
   const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setSpeciesResults([]);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     apiFetch("/users/me")
@@ -126,7 +140,8 @@ export default function Plants() {
             }}
           />
           {speciesResults.length > 0 && (
-            <div className="species-dropdown">
+            <div ref={dropdownRef} className="species-dropdown">
+              {" "}
               {speciesResults.map((species) => (
                 <div
                   key={species.id}
